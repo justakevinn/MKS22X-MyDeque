@@ -8,7 +8,7 @@ public class MyDeque<E>{
     data = d;
     size = 0;
     start = 0;
-    end = 9;
+    end = 0;
   }
 
   public MyDeque(int initialCapacity){
@@ -17,7 +17,7 @@ public class MyDeque<E>{
     data = d;
     size = 0;
     start = 0;
-    end = initialCapacity - 1;
+    end = 0;
   }
 
 
@@ -33,7 +33,7 @@ public class MyDeque<E>{
           s += data[x] + " ";
         }
       }
-      System.out.println("a");
+    //  System.out.println("a");
     }
     else{
       for (int x = start; x < data.length; x++){
@@ -46,7 +46,7 @@ public class MyDeque<E>{
           s += data[x] + " ";
         }
       }
-      System.out.println("b");
+  //    System.out.println("b");
     }
     s += "}";
     return s;
@@ -92,42 +92,72 @@ public class MyDeque<E>{
   }
 
 
-
+//Too slow(?) when using Ethan's Driver
   private void resize(){
-    if (size == data.length){
-      E[] d = (E[])new Object[size*2];
-      for (int i = 0; i < data.length; i++){
-        if (start <= end){
-          for (int x = start; x <= end; x++){
-            d[i] = data[x];
-          }
-        }
-        else{
-          for (int x = start; x < data.length; x++){
-            d[i] = data[x];
-          }
-          for (int x = 0; x <= end; x++){
-            d[i] = data[x];
-          }
-        }
-      }
-      data = d;
+    E[] temp = (E[]) new Object[2 * data.length];
+    int oldIndex = start;
+    int newIndex = 0;
+    while(oldIndex != end){
+      temp[newIndex] = data[oldIndex];
+      oldIndex = (oldIndex + 1) % data.length; //Makes it so the oldIndex just loops over
+      newIndex++;
     }
+    temp[newIndex] = data[end];
+    data = temp;
+    start = 0;
+    end = newIndex;
   }
 
 
-  public void addLast(E element){
-    resize();
-    data[size] = element;
-    end = size;
-    size++;
+
+  public E getFirst(){
+    if(size == 0){
+      throw new NoSuchElementException();
+    }
+    return data[start];
   }
 
+  public E getLast(){
+    if(size == 0){
+      throw new NullPointerException();
+    }
+    return data[end];
+  }
 
+  public E removeFirst(){
+    if(size == 0){
+      throw new NoSuchElementException();
+    }
+    E answer = data[start];
+    data[start] = null;
+    if(start == data.length - 1){
+      start = 0;
+    }
+    else{
+      start++;
+    }
+    size--;
+    return answer;
+
+    }
+
+
+  public E removeLast(){
+      if(size == 0){
+        throw new NullPointerException();
+      }
+      E answer = data[end];
+      data[end] = null;
+      if(end == 0){
+        end = data.length - 1;
+      }
+      else{
+        end--;
+      }
+      size-=1;
+      return answer;
+    }
   /*  public E removeFirst(){ }
-  public E removeLast(){ }
-  public E getFirst(){ }
-  public E getLast(){ }
   */
 
   public static void main (String[] args){
