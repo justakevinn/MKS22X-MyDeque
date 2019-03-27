@@ -1,3 +1,8 @@
+import java.util.*;
+import java.io.*;
+
+
+
 public class MyDeque<E>{
   private E[] data;
   private int size, start, end;
@@ -33,7 +38,7 @@ public class MyDeque<E>{
           s += data[x] + " ";
         }
       }
-    //  System.out.println("a");
+      //  System.out.println("a");
     }
     else{
       for (int x = start; x < data.length; x++){
@@ -46,7 +51,7 @@ public class MyDeque<E>{
           s += data[x] + " ";
         }
       }
-  //    System.out.println("b");
+      //    System.out.println("b");
     }
     s += "}";
     return s;
@@ -58,7 +63,10 @@ public class MyDeque<E>{
     }
     resize();
     //There are two cases for adding first:
-    if(start == 0){
+    if (size == 0){
+      data[start] = element;
+    }
+    else if(start == 0){
       data[data.length - 1] = element;
       start = data.length - 1;
     }
@@ -66,7 +74,7 @@ public class MyDeque<E>{
       data[start - 1] = element;
       start--;
     }
-    size+= 1;
+    size++;
     //System.out.println(size);
     //System.out.println(data.length);
   }
@@ -92,20 +100,21 @@ public class MyDeque<E>{
   }
 
 
-//Too slow(?) when using Ethan's Driver
   private void resize(){
-    E[] temp = (E[]) new Object[2 * data.length];
-    int oldIndex = start;
-    int newIndex = 0;
-    while(oldIndex != end){
-      temp[newIndex] = data[oldIndex];
-      oldIndex = (oldIndex + 1) % data.length; //Makes it so the oldIndex just loops over
-      newIndex++;
+    if (size == data.length){
+      E[] temp = (E[]) new Object[2 * data.length];
+      int oldIndex = start;
+      int newIndex = 0;
+      while(oldIndex != end){
+        temp[newIndex] = data[oldIndex];
+        oldIndex = (oldIndex + 1) % data.length; //Makes it so the oldIndex just loops over
+        newIndex++;
+      }
+      temp[newIndex] = data[end];
+      data = temp;
+      start = 0;
+      end = newIndex;
     }
-    temp[newIndex] = data[end];
-    data = temp;
-    start = 0;
-    end = newIndex;
   }
 
 
@@ -119,7 +128,7 @@ public class MyDeque<E>{
 
   public E getLast(){
     if(size == 0){
-      throw new NullPointerException();
+      throw new NoSuchElementException();
     }
     return data[end];
   }
@@ -139,40 +148,122 @@ public class MyDeque<E>{
     size--;
     return answer;
 
-    }
+  }
 
 
   public E removeLast(){
-      if(size == 0){
-        throw new NullPointerException();
-      }
-      E answer = data[end];
-      data[end] = null;
-      if(end == 0){
-        end = data.length - 1;
-      }
-      else{
-        end--;
-      }
-      size-=1;
-      return answer;
+    if(size == 0){
+      throw new NoSuchElementException();
     }
-  /*  public E removeFirst(){ }
-  */
+    E answer = data[end];
+    data[end] = null;
+    if(end == 0){
+      end = data.length - 1;
+    }
+    else{
+      end--;
+    }
+    size--;
+    return answer;
+  }
+
+  public String array(){
+    return Arrays.toString(data);
+  }
 
   public static void main (String[] args){
     MyDeque test = new MyDeque(4);
-    test.addFirst(1);
-    System.out.println(test.toString());
-    test.addFirst(2);
-    System.out.println(test.toString());
-    test.addFirst(3);
-    System.out.println(test.toString());
-    test.addFirst(4);
-    System.out.println(test.toString());
-    test.addFirst(5);
+  /*  test.addFirst(1);
+    System.out.println(test.array());
     System.out.println(test.toString());
 
+    test.addFirst(2);
+    System.out.println(test.array());
+    System.out.println(test.toString());
+
+    test.addFirst(3);
+    System.out.println(test.array());
+    System.out.println(test.toString());
+
+    test.addFirst(4);
+    System.out.println(test.array());
+    System.out.println(test.toString());
+
+    test.addFirst(5);
+    System.out.println(test.array());
+    System.out.println(test.toString());
+
+    test.addFirst(6);
+    System.out.println(test.array());
+    System.out.println(test.toString());
+
+    test.addFirst(7);
+    System.out.println(test.array());
+    System.out.println(test.toString());
+
+    test.addFirst(8);
+    System.out.println(test.array());
+    System.out.println(test.toString());*/
+
+    test.addLast(1);
+    System.out.println(test.array());
+    System.out.println(test.toString());
+
+    test.addLast(2);
+    System.out.println(test.array());
+    System.out.println(test.toString());
+
+    test.addLast(3);
+    System.out.println(test.array());
+    System.out.println(test.toString());
+
+    test.addLast(4);
+    System.out.println(test.array());
+    System.out.println(test.toString());
+
+    test.addLast(5);
+    System.out.println(test.array());
+    System.out.println(test.toString());
+
+    test.addLast(6);
+    System.out.println(test.array());
+    System.out.println(test.toString());
+
+    test.addLast(7);
+    System.out.println(test.array());
+    System.out.println(test.toString());
+
+    test.addLast(8);
+    System.out.println(test.array());
+    System.out.println(test.toString());
+
+    test.addFirst(0);
+    System.out.println(test.array());
+    System.out.println(test.toString());
+
+    test.addLast(9);
+    System.out.println(test.array());
+    System.out.println(test.toString());
+
+    test.removeFirst();
+    System.out.println(test.array());
+    System.out.println(test.toString());
+
+    test.removeFirst();
+    System.out.println(test.array());
+    System.out.println(test.toString());
+
+    test.addFirst(1);
+    System.out.println(test.array());
+    System.out.println(test.toString());
+
+    test.removeLast();
+    System.out.println(test.array());
+    System.out.println(test.toString());
+
+    test.removeLast();
+    System.out.println(test.array());
+    System.out.println(test.toString());
   }
 
 
